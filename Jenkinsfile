@@ -5,8 +5,8 @@ pipeline {
         GIT_REPO = 'https://github.com/fajri-isnanto/jenkinstoopensift.git'
         GIT_BRANCH = 'main'
         DOCKER_IMAGE = 'my-docker-image:latest'
-        SONARQUBE_SCANNER = 'SonarQubeScanner' // Name of the SonarQube Scanner tool configured in Jenkins
-        SONARQUBE_SERVER = 'SonarQubeServer'   // Name of the SonarQube server configured in Jenkins
+        SONARQUBE_SCANNER = 'sonarqube-scanner' // Name of the SonarQube Scanner tool configured in Jenkins
+        SONARQUBE_SERVER = 'sonarqube-server'   // Name of the SonarQube server configured in Jenkins
         OPENSHIFT_CLUSTER = 'https://api.openshift-cluster-url:6443' // OpenShift cluster URL
         OPENSHIFT_PROJECT = 'my-project'       // OpenShift project name
     }
@@ -18,16 +18,16 @@ pipeline {
             }
         }
 
-        // stage('SonarQube Analysis') {
-        //     steps {
-        //         script {
-        //             def scannerHome = tool "${SONARQUBE_SCANNER}"
-        //             withSonarQubeEnv("${SONARQUBE_SERVER}") {
-        //                 sh "${scannerHome}/bin/sonar-scanner"
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Scanning By SonarQube ') {
+            steps {
+                script {
+                    def scannerHome = tool "${SONARQUBE_SCANNER}"
+                    withSonarQubeEnv("${SONARQUBE_SERVER}") {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
+            }
+        }
 
         // stage('Build in OpenShift') {
         //     steps {
