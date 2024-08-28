@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        GIT_REPO = 'https://github.com/username/repo.git'
+        GIT_REPO = 'https://github.com/fajri-isnanto/jenkinstoopensift.git'
         GIT_BRANCH = 'main'
         DOCKER_IMAGE = 'my-docker-image:latest'
         SONARQUBE_SCANNER = 'SonarQubeScanner' // Name of the SonarQube Scanner tool configured in Jenkins
@@ -18,48 +18,48 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    def scannerHome = tool "${SONARQUBE_SCANNER}"
-                    withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                        sh "${scannerHome}/bin/sonar-scanner"
-                    }
-                }
-            }
-        }
+        // stage('SonarQube Analysis') {
+        //     steps {
+        //         script {
+        //             def scannerHome = tool "${SONARQUBE_SCANNER}"
+        //             withSonarQubeEnv("${SONARQUBE_SERVER}") {
+        //                 sh "${scannerHome}/bin/sonar-scanner"
+        //             }
+        //         }
+        //     }
+        // }
 
-        stage('Build in OpenShift') {
-            steps {
-                script {
-                    openshift.withCluster("${OPENSHIFT_CLUSTER}") {
-                        openshift.withProject("${OPENSHIFT_PROJECT}") {
-                            sh "oc start-build ${DOCKER_IMAGE} --follow"
-                        }
-                    }
-                }
-            }
-        }
+        // stage('Build in OpenShift') {
+        //     steps {
+        //         script {
+        //             openshift.withCluster("${OPENSHIFT_CLUSTER}") {
+        //                 openshift.withProject("${OPENSHIFT_PROJECT}") {
+        //                     sh "oc start-build ${DOCKER_IMAGE} --follow"
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
-        stage('Trivy Image Scan') {
-            steps {
-                script {
-                    sh "trivy image --severity HIGH,CRITICAL ${DOCKER_IMAGE}"
-                }
-            }
-        }
+        // stage('Trivy Image Scan') {
+        //     steps {
+        //         script {
+        //             sh "trivy image --severity HIGH,CRITICAL ${DOCKER_IMAGE}"
+        //         }
+        //     }
+        // }
 
-        stage('Deploy to OpenShift') {
-            steps {
-                script {
-                    openshift.withCluster("${OPENSHIFT_CLUSTER}") {
-                        openshift.withProject("${OPENSHIFT_PROJECT}") {
-                            sh "oc rollout latest dc/${DOCKER_IMAGE}"
-                        }
-                    }
-                }
-            }
-        }
+        // stage('Deploy to OpenShift') {
+        //     steps {
+        //         script {
+        //             openshift.withCluster("${OPENSHIFT_CLUSTER}") {
+        //                 openshift.withProject("${OPENSHIFT_PROJECT}") {
+        //                     sh "oc rollout latest dc/${DOCKER_IMAGE}"
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     post {
