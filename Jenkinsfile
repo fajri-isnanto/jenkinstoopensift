@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.8.6-openjdk-11' // Use the Maven Docker image with Java 11
-            args '-v /root/.m2:/root/.m2' // Optionally, mount the .m2 directory to cache dependencies
-        }
-    }
+    agent any
 
     environment {
         GIT_REPO = 'https://github.com/fajri-isnanto/jenkinstoopensift.git'
