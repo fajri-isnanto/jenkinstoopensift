@@ -1,73 +1,28 @@
-pipeline {
-    agent any
+node('skopeo') {
 
-    environment {
-        GIT_REPO = 'https://github.com/fajri-isnanto/jenkinstoopensift.git'
-        GIT_BRANCH = 'main'
-        DOCKER_IMAGE = 'my-docker-image:latest'
-        SONARQUBE_SCANNER = 'sonarqube-scanner' 
-        SONARQUBE_SERVER = 'http://sonar.sonarqube.svc.cluster.local:9000'   
-        OPENSHIFT_CLUSTER = 'https://api.openshift-cluster-url:6443' 
-        OPENSHIFT_PROJECT = 'my-project' 
-        SONARQUBE_TOKEN = 'sonar-fajri'
-        SONARQUBE_PROJECT = 'spring-helloWorld'      
-    }
+        def GIT_REPO = 'https://github.com/fajri-isnanto/jenkinstoopensift.git'
+        def GIT_BRANCH = 'main'
+        def DOCKER_IMAGE = 'my-docker-image:latest'
+        def SONARQUBE_SCANNER = 'sonarqube-scanner' 
+        def SONARQUBE_SERVER = 'http://sonar.sonarqube.svc.cluster.local:9000'   
+        def OPENSHIFT_CLUSTER = 'https://api.openshift-cluster-url:6443' 
+        def OPENSHIFT_PROJECT = 'my-project' 
+        def SONARQUBE_TOKEN = 'sonar-fajri'
+        def SONARQUBE_PROJECT = 'spring-helloWorld'      
 
-    stages {
+    // def appName="petclinic"
+    // def projectName="spring"
+    // def repoUrl="github.com/carmensyva/spring-petclinic.git"
+    // def branchName="main"
+
+    // def intRegistryDev="default-route-openshift-image-registry.apps.dev.mibocp.co.id"
+    // def ocpDRCDev="https://api.dev.mibocp.co.id:6443"
+    // def hostedRepoUrl = "http://nexus-service.nexus.svc.cluster.local:8081/repository/mib-maven-hosted/"
+
         stage('Clone Repository') {
             steps {
                 git branch: "${GIT_BRANCH}", url: "${GIT_REPO}"
             }
         }
-
-        stage('SonarQube Analysis') {
-            steps {
-                sh '''
-                 mvn clean verify sonar:sonar \
-                -Dsonar.projectKey="${SONARQUBE_PROJECT}" \
-                -Dsonar.sources=src \
-                -Dsonar.host.url="${SONARQUBE_SERVER}" \
-                -Dsonar.login="${SONARQUBE_TOKEN}"
-                '''
-            }
-        }
-
-        // stage('Build in OpenShift') {
-        //     steps {
-        //         script {
-        //             openshift.withCluster("${OPENSHIFT_CLUSTER}") {
-        //                 openshift.withProject("${OPENSHIFT_PROJECT}") {
-        //                     sh "oc start-build ${DOCKER_IMAGE} --follow"
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-        // stage('Trivy Image Scan') {
-        //     steps {
-        //         script {
-        //             sh "trivy image --severity HIGH,CRITICAL ${DOCKER_IMAGE}"
-        //         }
-        //     }
-        // }
-
-        // stage('Deploy to OpenShift') {
-        //     steps {
-        //         script {
-        //             openshift.withCluster("${OPENSHIFT_CLUSTER}") {
-        //                 openshift.withProject("${OPENSHIFT_PROJECT}") {
-        //                     sh "oc rollout latest dc/${DOCKER_IMAGE}"
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-    }
-
-    // post {
-    //     always {
-    //         cleanWs() // Clean workspace after build
-    //     }
-    // }
+        
 }
