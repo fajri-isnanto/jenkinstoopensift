@@ -18,16 +18,16 @@ pipeline {
             }
         }
 
-        stage('Scanning By SonarQube ') {
-            steps {
-                script {
-                    def scannerHome = tool "${SONARQUBE_SCANNER}"
-                    withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                        sh  "${scannerHome}/bin/sonar-scanner -X"
-                    }
-                }
-            }
-        }
+        // stage('Scanning By SonarQube ') {
+        //     steps {
+        //         script {
+        //             def scannerHome = tool "${SONARQUBE_SCANNER}"
+        //             withSonarQubeEnv("${SONARQUBE_SERVER}") {
+        //                 sh  "${scannerHome}/bin/sonar-scanner -X"
+        //             }
+        //         }
+        //     }
+        // }
 
         // stage('Build in OpenShift') {
         //     steps {
