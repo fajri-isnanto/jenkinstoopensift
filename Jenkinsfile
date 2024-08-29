@@ -26,6 +26,7 @@ node('skopeo') {
         }
 
         stage('SonarQube Analysis') {
+            withCredentials([string(credentialsId: 'sonar-token', variable: 'SONARQUBE_TOKEN')]) {
                 sh """
                  mvn clean verify sonar:sonar \
                 -Dsonar.projectKey="${SONARQUBE_PROJECT}" \
@@ -33,6 +34,7 @@ node('skopeo') {
                 -Dsonar.host.url="${SONARQUBE_SERVER}" \
                 -Dsonar.login="${SONARQUBE_TOKEN}"
                 """    
+        }
         }
 
 }
