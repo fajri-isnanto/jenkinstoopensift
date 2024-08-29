@@ -26,13 +26,13 @@ node('skopeo') {
         }
 
         stage('SonarQube Analysis') {
-                sh '''
+                sh """
                  mvn clean verify sonar:sonar \
                 -Dsonar.projectKey="${SONARQUBE_PROJECT}" \
                 -Dsonar.sources=src \
                 -Dsonar.host.url="${SONARQUBE_SERVER}" \
                 -Dsonar.login="${SONARQUBE_TOKEN}"
-                '''    
+                """    
         }
 
 }
