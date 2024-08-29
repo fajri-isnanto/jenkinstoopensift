@@ -20,9 +20,9 @@ node('skopeo') {
     // def hostedRepoUrl = "http://nexus-service.nexus.svc.cluster.local:8081/repository/mib-maven-hosted/"
 
         stage('Clone Repository') {
-            steps {
+            
                 git branch: "${GIT_BRANCH}", url: "${GIT_REPO}"
-            }
+            
         }
-        
+
 }
