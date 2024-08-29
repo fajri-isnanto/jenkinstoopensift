@@ -23,7 +23,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 sh '''
-                sonar-scanner \
+                 mvn clean verify sonar:sonar \
                 -Dsonar.projectKey="${SONARQUBE_PROJECT}" \
                 -Dsonar.sources=src \
                 -Dsonar.host.url="${SONARQUBE_SERVER}" \
