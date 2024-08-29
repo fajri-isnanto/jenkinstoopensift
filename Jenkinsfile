@@ -9,7 +9,8 @@ pipeline {
         SONARQUBE_SERVER = 'http://sonar.sonarqube.svc.cluster.local:9000'   
         OPENSHIFT_CLUSTER = 'https://api.openshift-cluster-url:6443' 
         OPENSHIFT_PROJECT = 'my-project' 
-        CRED_SONAR = 'sonar-fajri'      
+        SONARQUBE_TOKEN = 'sonar-fajri'
+        SONARQUBE_PROJECT = 'spring-helloWorld'      
     }
 
     stages {
@@ -19,20 +20,15 @@ pipeline {
             }
         }
 
-        // stage('Scanning By SonarQube ') {
-        //     steps {
-        //         script {
-        //             def scannerHome = tool "${SONARQUBE_SCANNER}"
-        //             withSonarQubeEnv("${SONARQUBE_SERVER}") {
-        //                 sh  "${scannerHome}/bin/sonar-scanner -X"
-        //             }
-        //         }
-        //     }
-        // }
-
-        stage('Build and SonarQube Analysis') {
+        stage('SonarQube Analysis') {
             steps {
-                sh 'mvn clean verify sonar:sonar -Dsonar.host.url="${SONARQUBE_SERVER}" -Dsonar.login="${CRED_SONAR}"'
+                sh '''
+                sonar-scanner \
+                -Dsonar.projectKey="${SONARQUBE_PROJECT}" \
+                -Dsonar.sources=src \
+                -Dsonar.host.url="${SONARQUBE_SERVER}" \
+                -Dsonar.login="${SONARQUBE_TOKEN}"
+                '''
             }
         }
 
